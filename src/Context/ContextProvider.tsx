@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 function ContextProvider({children}){
     const response=localStorage.getItem("users");
     const navigate=useNavigate();
-const [user,setUser]=useState("");
+const [user,setUser]=useState<string>("");
 
 
-function login(userName){
+function login(userName:{userName:string}){
     setUser(userName);
 }
 function logout(){

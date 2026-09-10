@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-
+import type { User,FormErrors } from "../../types/Types";
 function Register(){
-    const [formData,setFormData]=useState({
+    const [formData,setFormData]=useState<User>({
       name:"",
         email:"",
         phone:"",
@@ -11,7 +11,7 @@ function Register(){
         terms:false,
 
     })
-    const [formErrors,setFormErrors]=useState({name:"",email:"",password:"",confirmPassword:""})
+    const [formErrors,setFormErrors]=useState<FormErrors>({name:"",email:"",password:"",confirmPassword:""})
     function handleSubmit(e){
         e.preventDefault();
         let updatedUsers;

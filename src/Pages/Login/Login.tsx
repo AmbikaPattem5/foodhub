@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useAuth } from "../../CustomHooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
+import type { LoginUser } from "../../types/Types";
 function Login(){
     const {user,login}=useAuth();
-    const [error,setError]=useState('');
+    const [error,setError]=useState<string>('');
     const data=localStorage.getItem("users");
-    const response=data?JSON.parse(data):[];
+    const response:LoginUser[]=data?JSON.parse(data):[];
     const navigate=useNavigate();
-    const [formData,setFormData]=useState({
+    const [formData,setFormData]=useState<LoginUser>({
         name:"",password:"",remember:false,
     })
     function handleSubmit(e){
