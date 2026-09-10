@@ -14,7 +14,7 @@ function Register(){
     const [formErrors,setFormErrors]=useState<FormErrors>({name:"",email:"",password:"",confirmPassword:""})
     function handleSubmit(e){
         e.preventDefault();
-        let updatedUsers;
+        let updatedUsers:User[];
         if(formData.name===""){
             setFormErrors({...formErrors,name:"Name is required"})
         }

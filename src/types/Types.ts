@@ -15,3 +15,8 @@ export type FormErrors={
     password:string;
     confirmPassword:string;
 }
+export type AuthContextType={
+    user:string,
+    login:()=>void,
+    logout:()=>void,
+}

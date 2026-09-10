@@ -12,7 +12,7 @@ function Login(){
         name:"",password:"",remember:false,
     })
     function handleSubmit(e){
-        let result=false;
+        let result:boolean=false;
         e.preventDefault();
         for(let i=0;i<response.length;i++){
 
