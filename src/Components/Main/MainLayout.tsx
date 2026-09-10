@@ -1,9 +1,9 @@
 import Header from "../Header/Header";
-function MainLayout({children}){
+import { Outlet } from "react-router-dom";
+function MainLayout(){
     return(
         <div>
             <Header/>
-            {children}
         </div>
     )
 }
