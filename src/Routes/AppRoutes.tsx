@@ -7,17 +7,21 @@ import Register from "../Pages/Register/Register";
 import Login from "../Pages/Login/Login";
 import Restaurants from "../Pages/Restaurants/Restaurants";
 import Cart from "../Components/Cart/Cart";
+import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword";
 function AppRoutes(){
     return(
         <Routes>
-            <Route path="/" element={<MainLayout/>}/>
-            <Route path='/home' element={<Home/>}/>
-            <Route path='/restaurants' element={<Restaurants/>}/> 
-            <Route path='/about' element={<About/>}/>
-            <Route path='/offers' element={<Offers/>}/>
+            <Route path='/' element={<MainLayout/>}>
+            
+            <Route index element={<Home/>}/>
+            <Route path='restaurants' element={<Restaurants/>}/> 
+            <Route path='about' element={<About/>}/>
+            <Route path='offers' element={<Offers/>}/>
             <Route path='cart' element={<Cart/>}/>
-            <Route path='/register' element={<Register/>}/>
-            <Route path='/login'element={<Login/>}/>
+            <Route path='register' element={<Register/>}/>
+            <Route path='login'element={<Login/>}/>
+            <Route path='forgotPassword' element={<ForgotPassword/>}/>
+            </Route>
         </Routes>
     )
 }
