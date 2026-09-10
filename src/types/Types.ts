@@ -14,9 +14,11 @@ export type FormErrors={
     email:string;
     password:string;
     confirmPassword:string;
+    phone:string;
+    terms:boolean|string;
 }
 export type AuthContextType={
     user:string,
-    login:()=>void,
+    login:(username:{name:string})=>void,
     logout:()=>void,
 }

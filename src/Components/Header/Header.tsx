@@ -3,7 +3,7 @@ import './Header.css'
 import { useAuth } from '../../CustomHooks/useAuth';
 function Header(){
             const navigate=useNavigate();
-            const {user,login,logout}=useAuth();
+            const {user,logout}=useAuth();
     function handleLogin(){
         navigate('/login')
     }    

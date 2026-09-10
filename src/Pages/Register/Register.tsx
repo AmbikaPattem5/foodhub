@@ -11,23 +11,60 @@ function Register(){
         terms:false,
 
     })
-    const [formErrors,setFormErrors]=useState<FormErrors>({name:"",email:"",password:"",confirmPassword:""})
-    function handleSubmit(e){
-        e.preventDefault();
-        let updatedUsers:User[];
+    const [formErrors,setFormErrors]=useState<FormErrors>({name:"",email:"",password:"",phone:"",confirmPassword:"",terms:false})
+    function validateForm():FormErrors{
+        const errors:FormErrors={name:"",email:"",password:"",confirmPassword:"",phone:"",terms:false};
         if(formData.name===""){
-            setFormErrors({...formErrors,name:"Name is required"})
+        errors.name="Name is required";
         }
         if(formData.email===""){
-            setFormErrors({...formErrors,email:"Email is required"})
+            errors.email="Email is required";
+        
+        }
+        if(formData.phone===""){
+            errors.phone="Phone number is required"
+        }
+        if(formData.password===""){
+            errors.password="Password is required"
+        }
+        else if(formData.confirmPassword===""){
+            errors.confirmPassword="Confirm Password is required"
+        }
+        else if(formData.password!==formData.confirmPassword){
+            errors.password="Password is mismatched";
+        }
+        if(formData.terms===false){
+            errors.terms="Accept terms and conditions"
+        }
+        
+        return errors;
+    }
+    function handleSubmit(e){
+        e.preventDefault();
+       const errors=validateForm()
+        let updatedUsers:User[];
+        // if(formData.name===""){
+        //     setFormErrors({...formErrors,name:"Name is required"})
+        // }
+        // if(formData.email===""){
+        //     setFormErrors({...formErrors,email:"Email is required"})
 
+        // }
+        // if(formData.password!=formData.confirmPassword){
+        //     setFormErrors({...formErrors,confirmPassword:"password do not match"})
+        // }
+        setFormErrors(errors);
+        const errorResult=Object.values(errors).some(errMessage=>errMessage!="")
+        if(errorResult){
+            return;
         }
-        if(formData.password!=formData.confirmPassword){
-            setFormErrors({...formErrors,confirmPassword:"password do not match"})
-        }
+        
                 console.log(formData);
-        const response=localStorage.getItem("users")
-        const responsData=JSON.parse(response);
+
+        const response:string|null=localStorage.getItem("users")
+        
+
+        const responsData:User[]=response==null?[]:JSON.parse(response);
         console.log("this is"+response);
         if(responsData===null){
              updatedUsers=[formData]
@@ -59,20 +96,21 @@ function Register(){
         <div>
             <form onSubmit={handleSubmit}>
             <label>Full Name</label>
-            <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+            <input type="text" name="name" value={formData.name} onChange={handleChange}  />
             {formErrors.name&&<p>{formErrors.name}</p>}
             <label>Email</label>
-            <input type="email" name="email" value={formData.email}onChange={handleChange} required/>
+            <input type="email" name="email" value={formData.email}onChange={handleChange} />
             {formErrors.email&&<p>{formErrors.email}</p>}
             <label>Phone Number</label>
-            <input type="number" name="phone" value={formData.phone} onChange={handleChange} required/>
+            <input type="number" name="phone" value={formData.phone} onChange={handleChange} />
+            {formErrors.phone&&<p>{formErrors.phone}</p>}
             <label>Password</label>
-            <input type="text" name="password" value={formData.password} onChange={handleChange}/>
+            <input type="password" name="password" value={formData.password} onChange={handleChange}/>
             {formErrors.password&&<p>{formErrors.password}</p>}
             <label>Confirm Password</label>
-            <input type="text" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}/>
+            <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}/>
             <input type="checkbox" name="terms" checked={formData.terms}  onChange={handleChange}/>
-            
+            {formErrors.terms&&<p>{formErrors.terms}</p>}
             <button type="submit">Register</button>
             </form>
             <p>Already have an account</p><NavLink to='/login'>Login</NavLink>

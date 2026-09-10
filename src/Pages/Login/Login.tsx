@@ -3,7 +3,7 @@ import { useAuth } from "../../CustomHooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import type { LoginUser } from "../../types/Types";
 function Login(){
-    const {user,login}=useAuth();
+    const {login}=useAuth();
     const [error,setError]=useState<string>('');
     const data=localStorage.getItem("users");
     const response:LoginUser[]=data?JSON.parse(data):[];
@@ -30,11 +30,14 @@ function Login(){
 
     }
     function handleChange(e){
-        if(e.target.name=="name"){
+        if(e.target.name==="name"){
             setFormData({...formData,[e.target.name]:e.target.value});
         }
-        if(e.target.name=="password"){
+        if(e.target.name==="password"){
             setFormData({...formData,[e.target.name]:e.target.value});
+        }
+        if(e.target.name==="remember"){
+            setFormData({...formData,[e.target.name]:e.target.checked})
         }
         
     }
@@ -43,7 +46,7 @@ function Login(){
             <h3>Welcome Back</h3>
             <p>Login to your FoodHub account</p>
             <form onSubmit={handleSubmit}>
-                <label>Email or Username</label>
+                <label>Username</label>
                 <input type="text" name="name" value={formData.name} onChange={handleChange}/>
                 <label>Password</label>
                 <input type="password" name="password" value={formData.password}  onChange={handleChange}/>
