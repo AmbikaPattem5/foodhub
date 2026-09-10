@@ -24,14 +24,17 @@ function Register(){
         if(formData.phone===""){
             errors.phone="Phone number is required"
         }
+        else if(formData.phone.length<=10){
+            errors.phone="Phone number must be 10 digits"
+        }
         if(formData.password===""){
             errors.password="Password is required"
         }
         else if(formData.confirmPassword===""){
-            errors.confirmPassword="Confirm Password is required"
+            errors.password="Confirm Password is required"
         }
         else if(formData.password!==formData.confirmPassword){
-            errors.password="Password is mismatched";
+            errors.password="Confirm Password is mismatched";
         }
         if(formData.terms===false){
             errors.terms="Accept terms and conditions"
@@ -102,7 +105,7 @@ function Register(){
             <input type="email" name="email" value={formData.email}onChange={handleChange} />
             {formErrors.email&&<p>{formErrors.email}</p>}
             <label>Phone Number</label>
-            <input type="number" name="phone" value={formData.phone} onChange={handleChange} />
+            <input type="string" name="phone" value={formData.phone} onChange={handleChange} />
             {formErrors.phone&&<p>{formErrors.phone}</p>}
             <label>Password</label>
             <input type="password" name="password" value={formData.password} onChange={handleChange}/>
