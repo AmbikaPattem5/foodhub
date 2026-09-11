@@ -2,14 +2,14 @@ import { AuthContext } from "./AuthContext";
 import { useState } from "react";
 function ContextProvider({children}){
     
-const [user,setUser]=useState<string>("");
+const [user,setUser]=useState<string|null>(null);
 
 
-function login(userName:{userName:string}){
+function login(userName:string){
     setUser(userName);
 }
 function logout(){
-    setUser("")
+    setUser(null)
 }
 return(
    <AuthContext.Provider value={{user,login,logout}}>

@@ -11,30 +11,34 @@ function Register(){
         terms:false,
 
     })
-    const [formErrors,setFormErrors]=useState<FormErrors>({name:"",email:"",password:"",phone:"",confirmPassword:"",terms:false})
+    const [formErrors,setFormErrors]=useState<FormErrors>({name:"",email:"",password:"",phone:"",confirmPassword:"",terms:""})
     function validateForm():FormErrors{
-        const errors:FormErrors={name:"",email:"",password:"",confirmPassword:"",phone:"",terms:false};
+        const emailPattern= /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          const phonePattern = /^[0-9]{10}$/;
+        const errors:FormErrors={name:"",email:"",password:"",confirmPassword:"",phone:"",terms:""};
         if(formData.name===""){
         errors.name="Name is required";
         }
         if(formData.email===""){
             errors.email="Email is required";
-        
+        }
+        else if(!emailPattern.test(formData.email)){
+            errors.email="Please enter the valid address"
         }
         if(formData.phone===""){
             errors.phone="Phone number is required"
         }
-        else if(formData.phone.length<=10){
-            errors.phone="Phone number must be 10 digits"
+        else if (!phonePattern.test(formData.phone)) {
+            errors.phone = "Phone number must be exactly 10 digits";
         }
         if(formData.password===""){
             errors.password="Password is required"
         }
         else if(formData.confirmPassword===""){
-            errors.password="Confirm Password is required"
+            errors.confirmPassword="Confirm Password is required"
         }
         else if(formData.password!==formData.confirmPassword){
-            errors.password="Confirm Password is mismatched";
+            errors.confirmPassword="Confirm Password is mismatched";
         }
         if(formData.terms===false){
             errors.terms="Accept terms and conditions"
@@ -105,13 +109,14 @@ function Register(){
             <input type="email" name="email" value={formData.email}onChange={handleChange} />
             {formErrors.email&&<p>{formErrors.email}</p>}
             <label>Phone Number</label>
-            <input type="string" name="phone" value={formData.phone} onChange={handleChange} />
+            <input type="text" name="phone" value={formData.phone} onChange={handleChange} />
             {formErrors.phone&&<p>{formErrors.phone}</p>}
             <label>Password</label>
             <input type="password" name="password" value={formData.password} onChange={handleChange}/>
             {formErrors.password&&<p>{formErrors.password}</p>}
             <label>Confirm Password</label>
             <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}/>
+                        {formErrors.confirmPassword&&<p>{formErrors.confirmPassword}</p>}
             <input type="checkbox" name="terms" checked={formData.terms}  onChange={handleChange}/>
             {formErrors.terms&&<p>{formErrors.terms}</p>}
             <button type="submit">Register</button>
