@@ -4,6 +4,7 @@ function MainLayout(){
     return(
         <div>
             <Header/>
+            <Outlet/>
         </div>
     )
 }

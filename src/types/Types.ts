@@ -15,10 +15,10 @@ export type FormErrors={
     password:string;
     confirmPassword:string;
     phone:string;
-    terms:boolean|string;
+    terms:string;
 }
 export type AuthContextType={
     user:string,
-    login:(username:{name:string})=>void,
+    login:(username:string)=>void
     logout:()=>void,
 }
