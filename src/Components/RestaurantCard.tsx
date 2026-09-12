@@ -16,7 +16,7 @@ return(
         <section>
             <p>{restaurant.restaurantName}</p>
             <p>⭐{restaurant.rating}</p>
-            <p>{restaurant.cuisin}</p>
+            <p>{restaurant.cuisine}</p>
             <p>{restaurant.deliveryTime} minutes</p>
             <p>₹{restaurant.priceForTwo} for Two</p>
 

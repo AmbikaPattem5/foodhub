@@ -6,15 +6,13 @@ import { useNavigate } from "react-router-dom";
 import './Home.css'
 function Home(){
     const [searchInput,setSearchInput]=useState<string>("");
+    const [selectedCuisine,setSelectedCuisine]=useState<string>("")
    // console.log(Restaurants)
    const navigate=useNavigate();
     function handleSearch(e){
          return setSearchInput(e.target.value);
     }
-    const filteredResult=Restaurants.filter((restaurant)=>{
-        return (restaurant.restaurantName).toLowerCase().includes(searchInput.toLowerCase())
-        
-})
+    
 const cuisinList=Restaurants.map((restarant)=>
 {
     return restarant.cuisine;
@@ -23,15 +21,24 @@ let uniqueList=[];
 for(let i=0;i<cuisinList.length;i++){
     let subList=cuisinList[i];
     for(let j=0;j<subList.length;j++){
-        let cuisinItem=subList[j];
+        let cuisinItem=subList[j].toLowerCase();
         if(!uniqueList.includes(cuisinItem)){
             uniqueList.push(cuisinItem)
         }
     }
 }
+const filteredResult=Restaurants.filter((restaurant)=>{
+    const searchMatch= ((restaurant.restaurantName).toLowerCase().includes(searchInput.toLowerCase()))||
+                       (restaurant.cuisine.some((cuisine)=>(cuisine.toLowerCase().includes(searchInput.toLowerCase()))));
+    const cuisineMatch= selectedCuisine==""||restaurant.cuisine.some((cuisine)=>cuisine.toLowerCase()===selectedCuisine.toLowerCase())
+    return searchMatch&&cuisineMatch
+})
 function handleCard({restaurant}){
     navigate(`/restaurantCard/${restaurant.id}`,{state:restaurant})
 
+}
+function handleCusine(cuisin){
+    setSelectedCuisine(cuisin);
 }
 console.log(uniqueList)
 console.log(cuisinList);
@@ -45,25 +52,26 @@ console.log(cuisinList);
                     </div>
                  <div>
                     <input type="text" value={searchInput} onChange={handleSearch} placeholder="Search restaurants or cuisines..."/>
-                    {searchInput.trim()!=""&&(
+                    {/* {searchInput.trim()!=""&&(
                     filteredResult.length>0?filteredResult.map((restaurant)=>
                     <p>{restaurant.restaurantName}</p>
                     ):<p>"NO Items Found"</p>
                     )
-            }
+            } */}
                 </div>                                        
                 </section>
             </div>
             <div>
                 <h4>Popular Cuisines</h4>
              {uniqueList.map((cuisin)=>(
-                <button>{cuisin}</button>
+                <button onClick={()=>handleCusine(cuisin)}>{cuisin}</button>
              ))}
             </div>
+            {(filteredResult.length>0)?
             <div>
                 <h4>Restaurants near you</h4>
                 <div className="restaurentList">
-                {Restaurants.map((restaurant)=>( 
+                {filteredResult.map((restaurant)=>( 
                     <div key={restaurant.id} onClick={()=>handleCard({restaurant})} className="card">
                        <img src={restaurant.restaurantImage} alt="image" height={50} width={100}/>
                        <h6>{restaurant.restaurantName}</h6>
@@ -72,7 +80,8 @@ console.log(cuisinList);
                     </div>
                 ))}
                 </div>
-            </div>
+            </div>:(<p>No Items Found</p>)
+}
         </div>
     )
 }
