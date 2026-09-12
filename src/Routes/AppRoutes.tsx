@@ -8,7 +8,7 @@ import Login from "../Pages/Login/Login";
 import Restaurants from "../Pages/Restaurants/Restaurants";
 import Cart from "../Components/Cart/Cart";
 import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword";
-import RestaurantCard from "../Components/RestaurantCard";
+import RestaurantDetails from "../Components/RestaurantDetails";
 function AppRoutes(){
     return(
         <Routes>
@@ -23,7 +23,7 @@ function AppRoutes(){
             <Route path='login'element={<Login/>}/>
             <Route path='forgotPassword' element={<ForgotPassword/>}/>
             </Route>
-            <Route path='/restaurantCard/:id' element={<RestaurantCard/>}/>
+            <Route path='/restaurantdetails/:id' element={<RestaurantDetails/>}/>
         </Routes>
     )
 }
