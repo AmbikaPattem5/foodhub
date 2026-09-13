@@ -2,6 +2,7 @@
 import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './Routes/AppRoutes'
 import ContextProvider from './Context/ContextProvider'
+import CartProvider from './Context/Cart/CartProvider'
 function App() {
 
   return (
@@ -9,7 +10,9 @@ function App() {
       
       <BrowserRouter>
       <ContextProvider>
+        <CartProvider>
       <AppRoutes/>
+      </CartProvider>
       </ContextProvider>
       </BrowserRouter>
     </div>
