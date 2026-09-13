@@ -1,32 +1,40 @@
 import { useState } from "react";
 import { useAuth } from "../../CustomHooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
-import type { LoginUser } from "../../types/Types";
+import type { LoginUser,User } from "../../types/Types";
 function Login(){
     const {login}=useAuth();
     const [error,setError]=useState<string>('');
     const data=localStorage.getItem("users");
-    const response:LoginUser[]=data?JSON.parse(data):[];
+    const response:User[]=data?JSON.parse(data):[];
     const navigate=useNavigate();
     const [formData,setFormData]=useState<LoginUser>({
         name:"",password:"",remember:false,
     })
     function handleSubmit(e){
-        let result:boolean=false;
         e.preventDefault();
-        for(let i=0;i<response.length;i++){
-
-            if(response[i].name==formData.name && response[i].password==formData.password){
-                navigate('/');
-                result=true;
-                login(formData.name);
-            }
+        const loggInUser=response.find((user)=>
+            (user.name===formData.name || user.email === formData.name) && (user.password===formData.password)
+        )
+        // for(let i=0;i<response.length;i++){
             
+        //     if(response[i].name==formData.name && response[i].password==formData.password){
+        //         navigate('/');
+        //         result=true;
+        //         login(formData.name);
+        //     }
+            
+        // }
+        // if(!result){
+        //     setError("Invalid Credentials")
+        // }
+        if(loggInUser){
+            login(loggInUser.name);
+            navigate('/')
         }
-        if(!result){
+        else {
             setError("Invalid Credentials")
         }
-
 
     }
     function handleChange(e){
@@ -46,7 +54,7 @@ function Login(){
             <h3>Welcome Back</h3>
             <p>Login to your FoodHub account</p>
             <form onSubmit={handleSubmit}>
-                <label>Username</label>
+                <label>Username or Email</label>
                 <input type="text" name="name" value={formData.name} onChange={handleChange}/>
                 <label>Password</label>
                 <input type="password" name="password" value={formData.password}  onChange={handleChange}/>

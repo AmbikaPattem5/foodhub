@@ -1,0 +1,9 @@
+.restaurentList{
+    display: flex;
+    gap:15px;
+}
+.card{
+    border: 1px solid gray;
+    height:200px;
+    width:150px;
+}
