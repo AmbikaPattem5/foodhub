@@ -1,6 +1,7 @@
 import { CartContext } from "./CartContext";
 import { useState } from "react";
 import type { CartItemType, ChildrenProp } from "../../types/Types";
+import type { RestaurantMenu } from "../../types/Restaurant";
 function CartProvider({children} : ChildrenProp){
     const [cartItem,setCartItem]=useState<CartItemType[]>([]);
     function handleAddItem(item: RestaurantMenu) {
