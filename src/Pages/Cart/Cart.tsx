@@ -1,6 +1,6 @@
 import useCart from "../../CustomHooks/useCart";
 function Cart(){
-    const {cartItem,removeItem,totalCartItems,totalCartPrice,increamentCartItem,decreamentCartItem} = useCart()
+    const {cartItem,removeItem,totalCartItems,totalCartPrice,incrementCartItem,decrementCartItem} = useCart()
     const deliveryFee=40;
 return (
     
@@ -12,14 +12,14 @@ return (
                 <div>
                     {
                         cartItem.map((item)=>(
-                        <div>
+                        <div key={item.id}>
                             <div>
                                 <h4>{item.name}</h4><span>{item.price}</span>
-                                <div><button onClick={()=>decreamentCartItem(item.id)}> -</button>
+                                <div><button onClick={()=>decrementCartItem(item.id)}> -</button>
                                     <span>{item.quantity}</span>
-                                    <button onClick={()=>increamentCartItem(item.id)}> + </button>
+                                    <button onClick={()=>incrementCartItem(item.id)}> + </button>
                                 </div>
-                                <div><button onClick={()=>removeItem(item)}>Remove</button></div>
+                                <div><button onClick={()=>removeItem(item.id)}>Remove</button></div>
                             </div>
                         </div>
                         ))
