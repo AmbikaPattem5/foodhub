@@ -1,18 +1,15 @@
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Restaurants } from "../services/restaurantData";
-import type { Restaurant, RestaurantMenu } from "../types/Restaurant";
+import type { Restaurant } from "../types/Restaurant";
 import { RestaurantMenuItems } from "../services/restaurantMenu";
 import MenuItem from "./MenuItem/MenuItem";
-import { useState } from "react";
 function RestaurantDetails(){
-    const [addItem,setAddItem]=useState(null)
     const {id}=useParams()
     const updatedRestaurant:Restaurant|undefined=Restaurants.find((restaurant)=>(restaurant.id===Number(id)))
         
     const newMenuData=RestaurantMenuItems.filter((restaurant)=>(restaurant.restaurantId===updatedRestaurant?.id));
-    console.log(newMenuData);
-    const categoryList=new Set();
+    const categoryList:Set<string>=new Set();
     newMenuData.forEach((restaurant)=>categoryList.add(restaurant.category))
 return(
     <div>
@@ -42,18 +39,20 @@ return(
             }
         </div>
         <div>
-            <h5>Menu</h5>
+            {(updatedRestaurant && newMenuData.length>0)?
             <div>
+                <h5>Menu</h5>
                {[...categoryList].map((category)=>(
-                <div>
+                <div key={category}>
                 <h1>{category}</h1>
                 {
                     newMenuData.filter((menuItem)=>(menuItem.category === category)).map((item)=>
-                     <MenuItem item={item}/>)
+                     <MenuItem key={item.id} item={item}/>)
                 }
                </div>
                ))}
             </div>
+            :""}
         </div>
         
     </div>

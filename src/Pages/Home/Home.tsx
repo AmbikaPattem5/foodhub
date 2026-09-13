@@ -74,7 +74,7 @@ function Home() {
       <div>
         <h4>Popular Cuisines</h4>
         {uniqueList.map((cuisin) => (
-          <button onClick={() => handleCusine(cuisin)}>{cuisin}</button>
+          <button key={cuisin} onClick={() => handleCusine(cuisin)}>{cuisin}</button>
         ))}
       </div>
       {filteredResult.length > 0 ? (

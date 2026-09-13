@@ -1,9 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css'
 import { useAuth } from '../../CustomHooks/useAuth';
+import useCart from '../../CustomHooks/useCart';
 function Header(){
             const navigate=useNavigate();
             const {user,logout}=useAuth();
+            const {totalCartItems} = useCart();
     function handleLogin(){
         navigate('/login')
     }    
@@ -28,7 +30,7 @@ return(
             <div>🔍</div>
         </div>
         <div>
-            <Link to='/cart'>Cart</Link>
+            <Link to='/cart'>Cart({totalCartItems()})</Link>
         </div>
         <div className='buttons'>
           {!user? <button onClick={handleLogin}>Login</button>:<p>{user}<button onClick={logout}>Logout</button></p>}
