@@ -1,3 +1,5 @@
+import type { RestaurantMenu } from "./Restaurant";
+
 export type User={
     name:string,
     email:string,
@@ -31,13 +33,13 @@ export type CartItemType={
 }
 export type CartContextType = {
     cartItem : CartItemType[];
-    handleAddItem : (item : CartItemType) => void;
+    handleAddItem : (item : RestaurantMenu) => void;
     removeItem : (itemId : number) => void;
     incrementCartItem : (itemId : number) => void;
     decrementCartItem : (itemId : number) => void;
     totalCartItems : () => number ;
     totalCartPrice : () => number;
 }
-export type ChildrenProp {
+export type ChildrenProp = {
   children: React.ReactNode;
 }
