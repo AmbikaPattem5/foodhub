@@ -32,9 +32,12 @@ export type CartItemType={
 export type CartContextType = {
     cartItem : CartItemType[];
     handleAddItem : (item : CartItemType) => void;
-    removeItem : (item : CartItemType) => void;
-    increamentCartItem : (itemId : number) => void;
-    decreamentCartItem : (itemId : number) => void;
+    removeItem : (itemId : number) => void;
+    incrementCartItem : (itemId : number) => void;
+    decrementCartItem : (itemId : number) => void;
     totalCartItems : () => number ;
     totalCartPrice : () => number;
+}
+export type ChildrenProp {
+  children: React.ReactNode;
 }

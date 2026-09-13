@@ -1,53 +1,63 @@
 import { CartContext } from "./CartContext";
 import { useState } from "react";
-import type { CartItemType } from "../../types/Types";
-function CartProvider({children} : any){
-    const [cartItem,setCartItem]=useState<CartItemType[]|[]>([]);
-    
+import type { CartItemType, ChildrenProp } from "../../types/Types";
+function CartProvider({children} : ChildrenProp){
+    const [cartItem,setCartItem]=useState<CartItemType[]>([]);
+    const updatedCartArray=[...cartItem]
     function handleAddItem(item:CartItemType){
         const itemExists : boolean = cartItem.some((cart)=>(cart.id === item.id));
         if(itemExists){
-             cartItem.forEach((cart) => {
+             updatedCartArray.forEach((cart) => {
                 if(cart.id === item.id){
                      cart.quantity =Number(cart.quantity) + 1;
                     }
 
                 })
-                setCartItem([...cartItem]);
+                setCartItem([...updatedCartArray]);
     
         }
         else{
-            item.quantity = 1 ;
-            setCartItem([...cartItem,item]);
+            
+            const newCart = {...item}
+            newCart.quantity = 1 ;
+            setCartItem([...updatedCartArray,newCart]);
         }
         console.log(cartItem);
     }
-    function removeItem(item:CartItemType){
+    function removeItem(itemId : number){
             const result : CartItemType[] = cartItem.filter((cart)=>(cart.id !== item.id))
             setCartItem(result);
 
     }
-    function increamentCartItem(itemId : number){
-        cartItem.forEach((item) => { 
+    function incrementCartItem(itemId : number){
+        updatedCartArray.forEach((item) => { 
             if(item.id === itemId)
             {
                 item.quantity = item.quantity + 1;
             } 
      } )
-     setCartItem([...cartItem])
+     setCartItem([...updatedCartArray])
 
     }
-    function decreamentCartItem(itemId : number){
-        cartItem.forEach((item) => {
+    function decrementCartItem(itemId : number){
+        updatedCartArray.forEach((item) => {
+            
             if(item.id === itemId){
                 item.quantity = item.quantity - 1;
+                if(item.quantity===0){
+                    removeItem(item.id);
+                }
             }
         })
-        setCartItem([...cartItem])
+        setCartItem([...updatedCartArray])
     }
 
     function totalCartItems(){
-        return cartItem.length;
+        let totalItems : number = 0;
+        cartItem.forEach((item)=>{
+            totalItems = totalItems + item.quantity;
+        })
+        return totalItems;
     }
 
     function totalCartPrice(){
@@ -60,7 +70,7 @@ function CartProvider({children} : any){
     
 
     return(
-        <CartContext.Provider value={{cartItem,handleAddItem,removeItem, increamentCartItem, decreamentCartItem,totalCartItems, totalCartPrice}}>
+        <CartContext.Provider value={{cartItem,handleAddItem,removeItem, incrementCartItem, decrementCartItem,totalCartItems, totalCartPrice}}>
             {children}
         </CartContext.Provider>
 )}
