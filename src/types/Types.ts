@@ -20,7 +20,7 @@ export type FormErrors={
     terms:string;
 }
 export type AuthContextType={
-    user:string,
+    user:string|null,
     login:(username:string)=>void
     logout:()=>void,
 }
@@ -39,7 +39,39 @@ export type CartContextType = {
     decrementCartItem : (itemId : number) => void;
     totalCartItems : () => number ;
     totalCartPrice : () => number;
+    clearCart: () => void;
 }
 export type ChildrenProp = {
   children: React.ReactNode;
+}
+
+export type DeliveryDetails = {
+    name : string;
+    phone : string;
+    address : string;
+    city : string;
+    pincode : string;
+}
+export type addressErrors = {
+    name: string;
+    phone : string;
+    pincode: string;
+    address: string;
+    city: string;
+}
+export enum OrderStatus {
+    Placed = "Placed",
+    Preparing = "Preparing",
+    OutForDelivery = "OutForDelivery",
+    Delivered = "Delivered",
+
+}
+export type OrderType = {
+    id: string;
+    user: string;
+    items: Array<CartItemType>;
+    address: string;
+    totalAmount: number  ;
+    status: OrderStatus  ;
+    createdAt :string
 }
