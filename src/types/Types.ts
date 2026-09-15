@@ -43,3 +43,32 @@ export type CartContextType = {
 export type ChildrenProp = {
   children: React.ReactNode;
 }
+
+export type DeliveryDetails = {
+    name : string;
+    phone : number|undefined;
+    address : string;
+    city : string;
+    pincode : number|undefined;
+}
+export type addressErrors = {
+    name: string;
+    phone : number|string;
+    pincode: number | string
+}
+export enum OrderStatus {
+    Placed = "Placed",
+    Preparing = "Preparing",
+    OutForDelivery = "OutForDelivery",
+    Delivered = "Delivered",
+
+}
+export type OrderType = {
+    id: string;
+    user: string;
+    items: Array<CartItemType>;
+    address: string;
+    totalAmount: number | undefined;
+    status: OrderStatus | undefined;
+    createdAt :string
+}
