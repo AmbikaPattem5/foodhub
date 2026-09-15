@@ -55,9 +55,10 @@ function Cart() {
             <p>Delivery fee ₹{deliveryFee}</p>
             <h5>Total {totalCartPrice() + deliveryFee}</h5>
           </div>
+                <button onClick={handleCheckOut}>Proceed to CheckOut</button>
         </div>
       )}
-      <button onClick={handleCheckOut}>Proceed to CheckOut</button>
+      {/* <button onClick={handleCheckOut}>Proceed to CheckOut</button> */}
     </div>
   );
 }
