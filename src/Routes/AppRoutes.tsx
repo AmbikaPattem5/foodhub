@@ -9,6 +9,9 @@ import Restaurants from "../Pages/Restaurants/Restaurants";
 import ForgotPassword from "../Pages/ForgotPassword/ForgotPassword";
 import RestaurantDetails from "../Components/RestaurantDetails";
 import Cart from "../Pages/Cart/Cart";
+import CheckOut from "../Pages/CheckOut/CheckOut";
+import Orders from "../Pages/Orders/Orders";
+import OrderConfirmation from "../Pages/OrderConfirmation/OrderConfirmation";
 function AppRoutes() {
   return (
     <Routes>
@@ -22,6 +25,9 @@ function AppRoutes() {
         <Route path="login" element={<Login />} />
         <Route path="forgotPassword" element={<ForgotPassword />} />
         <Route path="restaurantdetails/:id" element={<RestaurantDetails />} />
+        <Route path="checkout" element={<CheckOut />} />
+        <Route path="orders" element={<Orders/>}/>
+        <Route path="orderConfirmation/:orderId" element={<OrderConfirmation/>}/>
       </Route>
     </Routes>
   );

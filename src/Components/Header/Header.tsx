@@ -13,7 +13,6 @@ function Header(){
         navigate('/register')
     }
 
-console.log(user);
 
 return(
     <div className="container">
@@ -31,6 +30,7 @@ return(
         </div>
         <div>
             <Link to='/cart'>Cart({totalCartItems()})</Link>
+            <Link to="/orders">Orders</Link>
         </div>
         <div className='buttons'>
           {!user? <button onClick={handleLogin}>Login</button>:<p>{user}<button onClick={logout}>Logout</button></p>}
