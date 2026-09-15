@@ -6,16 +6,16 @@ import { useNavigate } from "react-router-dom";
 function CheckOut() {
   const [address, setAddress] = useState<DeliveryDetails>({
     name: "",
-    phone: undefined,
+    phone: "",
     address: "",
     city: "",
-    pincode: undefined,
+    pincode: "",
   });
   const navigate = useNavigate();
   const [orders,setOrders] = useState<OrderType[]>([])
-  const [errors,setErrors] = useState<addressErrors>({name:"",phone:"",pincode:""})
-  const updateErrors : addressErrors =  {name:"",phone:"",pincode:""};
-  const { cartItem, totalCartPrice } = useCart();
+  const [errors,setErrors] = useState<addressErrors>({name:"",phone:"",address:"",city:"",pincode:""})
+  const updateErrors : addressErrors =  {name:"",phone:"",address:"",city:"",pincode:""};
+  const { cartItem, totalCartPrice, clearCart } = useCart();
   const deliveryFee: number = 40;
   function handleChange(e) {
     if (e.target.name === "name") {
@@ -48,6 +48,12 @@ function CheckOut() {
     else if(!(phonePattern).test(address.phone.toString())){
       updateErrors.phone = "Phone number must be 10 digits "
     }
+    if(address.city === ""){
+      updateErrors.city = "City is required";
+    }
+    if(address.address === ""){
+      updateErrors.address = "Address is required"
+    }
     if(address.pincode === undefined){
       updateErrors.pincode = "PinCode is required"
     }
@@ -55,7 +61,7 @@ function CheckOut() {
       updateErrors.pincode = "PinCode must be 6 digits"
     }
     setErrors(updateErrors);
-    const errorResult = Object.values(errors).some((errorMessage)=>(errorMessage!=""))
+    const errorResult = Object.values(updateErrors).some((errorMessage)=>(errorMessage!=""))
     if(errorResult){
       return;
     }
@@ -74,14 +80,15 @@ function CheckOut() {
     const responseData: OrderType[] = response===null ? [] : JSON.parse(response);
 
     if(responseData === null) {
-      updatedOrders = orders
+      updatedOrders = orders;
     }
     else{
       updatedOrders = [...responseData, newOrder]
     }
     localStorage.setItem("orders",JSON.stringify(updatedOrders));
-    setOrders(updatedOrders)
-    setErrors({name:"",phone:"",pincode:""});
+    setOrders(updatedOrders);
+    clearCart();
+    setErrors({name:"",phone:"",address:"",city:"",pincode:"",});
     navigate(`/orderConfirmation/${newOrder.id}`)
   }
   
@@ -90,7 +97,7 @@ function CheckOut() {
       <div>
         <div>
           <h4>Delivery Address</h4>
-          <form>
+          <form onSubmit={handleSubmit}>
             <label>Full Name</label>
             <input
               type="text"
@@ -116,6 +123,7 @@ function CheckOut() {
               value={address.address}
               onChange={handleChange}
             />
+            {errors.address &&<p>{errors.address}</p>}
             <br />
             <label>City</label>
             <input
@@ -124,6 +132,7 @@ function CheckOut() {
               value={address.city}
               onChange={handleChange}
             />
+            {errors.city && <p>{errors.city}</p>}
             <br />
             <label>Pincode</label>
             <input
@@ -134,6 +143,7 @@ function CheckOut() {
             />
             {errors.pincode && <p>{errors.pincode}</p>}
             <br />
+                  <button type="submit" >Place Order</button>
           </form>
         </div>
         <div>
@@ -154,7 +164,6 @@ function CheckOut() {
            <h4>Grand Total {totalCartPrice() + deliveryFee}</h4>
         </div>
       </div>
-      <button type="submit" onClick= {handleSubmit}>Place Order</button>
     </div>
   );
 }

@@ -39,6 +39,7 @@ export type CartContextType = {
     decrementCartItem : (itemId : number) => void;
     totalCartItems : () => number ;
     totalCartPrice : () => number;
+    clearCart: () => void;
 }
 export type ChildrenProp = {
   children: React.ReactNode;
@@ -46,15 +47,17 @@ export type ChildrenProp = {
 
 export type DeliveryDetails = {
     name : string;
-    phone : number|undefined;
+    phone : number|"";
     address : string;
     city : string;
-    pincode : number|undefined;
+    pincode : number|"";
 }
 export type addressErrors = {
     name: string;
     phone : number|string;
-    pincode: number | string
+    pincode: number | string;
+    address: string;
+    city: string;
 }
 export enum OrderStatus {
     Placed = "Placed",
@@ -68,7 +71,7 @@ export type OrderType = {
     user: string;
     items: Array<CartItemType>;
     address: string;
-    totalAmount: number | undefined;
-    status: OrderStatus | undefined;
+    totalAmount: number  ;
+    status: OrderStatus  ;
     createdAt :string
 }
