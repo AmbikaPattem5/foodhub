@@ -80,10 +80,13 @@ function CartProvider({children} : ChildrenProp){
         })
         return totalPrice;
     }
+    function clearCart(){
+      setCartItem([])
+    }
     
 
     return(
-        <CartContext.Provider value={{cartItem,handleAddItem,removeItem, incrementCartItem, decrementCartItem,totalCartItems, totalCartPrice}}>
+        <CartContext.Provider value={{cartItem,handleAddItem,removeItem, incrementCartItem, decrementCartItem,totalCartItems, totalCartPrice, clearCart}}>
             {children}
         </CartContext.Provider>
 )}
