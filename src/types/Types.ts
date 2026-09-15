@@ -20,7 +20,7 @@ export type FormErrors={
     terms:string;
 }
 export type AuthContextType={
-    user:string,
+    user:string|null,
     login:(username:string)=>void
     logout:()=>void,
 }
@@ -47,15 +47,15 @@ export type ChildrenProp = {
 
 export type DeliveryDetails = {
     name : string;
-    phone : number|"";
+    phone : string;
     address : string;
     city : string;
-    pincode : number|"";
+    pincode : string;
 }
 export type addressErrors = {
     name: string;
-    phone : number|string;
-    pincode: number | string;
+    phone : string;
+    pincode: string;
     address: string;
     city: string;
 }

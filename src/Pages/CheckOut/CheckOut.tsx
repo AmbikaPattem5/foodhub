@@ -2,7 +2,7 @@ import { useState } from "react";
 import { OrderStatus, type DeliveryDetails } from "../../types/Types";
 import useCart from "../../CustomHooks/useCart";
 import type { addressErrors, OrderType } from "../../types/Types";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function CheckOut() {
   const [address, setAddress] = useState<DeliveryDetails>({
     name: "",
@@ -12,29 +12,15 @@ function CheckOut() {
     pincode: "",
   });
   const navigate = useNavigate();
-  const [orders,setOrders] = useState<OrderType[]>([])
   const [errors,setErrors] = useState<addressErrors>({name:"",phone:"",address:"",city:"",pincode:""})
   const updateErrors : addressErrors =  {name:"",phone:"",address:"",city:"",pincode:""};
   const { cartItem, totalCartPrice, clearCart } = useCart();
   const deliveryFee: number = 40;
-  function handleChange(e) {
-    if (e.target.name === "name") {
+  function handleChange(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
       setAddress({ ...address, [e.target.name]: e.target.value });
-    }
-    if (e.target.name === "phone") {
-      setAddress({ ...address, [e.target.name]: e.target.value });
-    }
-    if (e.target.name === "address") {
-      setAddress({ ...address, [e.target.name]: e.target.value });
-    }
-    if (e.target.name === "city") {
-      setAddress({ ...address, [e.target.name]: e.target.value });
-    }
-    if (e.target.name === "pincode") {
-      setAddress({ ...address, [e.target.name]: e.target.value });
-    }
+
   }
-  function handleSubmit(e){
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>){
     
     e.preventDefault();
     const phonePattern = /^[0-9]{10}$/;
@@ -42,10 +28,10 @@ function CheckOut() {
     if(address.name === ""){
       updateErrors.name = " Name is required"
         }
-    if(address.phone === undefined){
+    if(address.phone === ""){
       updateErrors.phone = "Phone number is required"
     }
-    else if(!(phonePattern).test(address.phone.toString())){
+    else if(!(phonePattern).test(address.phone)){
       updateErrors.phone = "Phone number must be 10 digits "
     }
     if(address.city === ""){
@@ -54,14 +40,14 @@ function CheckOut() {
     if(address.address === ""){
       updateErrors.address = "Address is required"
     }
-    if(address.pincode === undefined){
+    if(address.pincode === ""){
       updateErrors.pincode = "PinCode is required"
     }
-    else if(!(pincodePattern).test(address.pincode.toString())){
+    else if(!(pincodePattern).test(address.pincode)){
       updateErrors.pincode = "PinCode must be 6 digits"
     }
     setErrors(updateErrors);
-    const errorResult = Object.values(updateErrors).some((errorMessage)=>(errorMessage!=""))
+    const errorResult = Object.values(updateErrors).some((errorMessage)=>(errorMessage!== ""))
     if(errorResult){
       return;
     }
@@ -77,16 +63,15 @@ function CheckOut() {
     }
     let  updatedOrders: OrderType[]
     const response:string |null = localStorage.getItem("orders");
-    const responseData: OrderType[] = response===null ? [] : JSON.parse(response);
 
-    if(responseData === null) {
-      updatedOrders = orders;
+    if(response === null) {
+      updatedOrders = [newOrder];
     }
     else{
+      const responseData : OrderType[] =JSON.parse(response);
       updatedOrders = [...responseData, newOrder]
     }
     localStorage.setItem("orders",JSON.stringify(updatedOrders));
-    setOrders(updatedOrders);
     clearCart();
     setErrors({name:"",phone:"",address:"",city:"",pincode:"",});
     navigate(`/orderConfirmation/${newOrder.id}`)
@@ -94,6 +79,8 @@ function CheckOut() {
   
   return (
     <div>
+      {        cartItem.length!==0 ?
+
       <div>
         <div>
           <h4>Delivery Address</h4>
@@ -109,7 +96,7 @@ function CheckOut() {
             <br />
             <label>Phone Number</label>
             <input
-              type="number"
+              type="tel"
               name="phone"
               value={address.phone}
               onChange={handleChange}
@@ -117,8 +104,7 @@ function CheckOut() {
             {errors.phone && <p>{errors.phone}</p>}
             <br />
             <label>Address</label>
-            <input
-              type="textarea"
+            <textarea
               name="address"
               value={address.address}
               onChange={handleChange}
@@ -136,7 +122,7 @@ function CheckOut() {
             <br />
             <label>Pincode</label>
             <input
-              type="number"
+              type="text"
               name="pincode"
               value={address.pincode}
               onChange={handleChange}
@@ -163,7 +149,13 @@ function CheckOut() {
            <br/>
            <h4>Grand Total {totalCartPrice() + deliveryFee}</h4>
         </div>
-      </div>
+        
+      </div>:
+      <div>
+        <p>cart is empty</p>
+        <Link to="/cart">Go back to Cart</Link>
+        </div>
+}
     </div>
   );
 }
