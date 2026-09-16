@@ -3,6 +3,8 @@ import { OrderStatus, type DeliveryDetails } from "../../types/Types";
 import useCart from "../../CustomHooks/useCart";
 import type { addressErrors, OrderType } from "../../types/Types";
 import { Link, useNavigate } from "react-router-dom";
+import useCoupen from "../../CustomHooks/useCoupen";
+import CouponInput from "../../Components/Coupen/CouponInput";
 function CheckOut() {
   const [address, setAddress] = useState<DeliveryDetails>({
     name: "",
@@ -11,11 +13,13 @@ function CheckOut() {
     city: "",
     pincode: "",
   });
+  const {calculateDiscount} =useCoupen();
   const navigate = useNavigate();
   const [errors,setErrors] = useState<addressErrors>({name:"",phone:"",address:"",city:"",pincode:""})
   const updateErrors : addressErrors =  {name:"",phone:"",address:"",city:"",pincode:""};
   const { cartItem, totalCartPrice, clearCart } = useCart();
   const deliveryFee: number = 40;
+  const discount: number = calculateDiscount() || 0;
   function handleChange(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
       setAddress({ ...address, [e.target.name]: e.target.value });
 
@@ -133,6 +137,7 @@ function CheckOut() {
           </form>
         </div>
         <div>
+          <CouponInput/>
           <h4>Order Summary</h4>
           {cartItem.map((item) => (
             <div key= {item.id}>
@@ -145,9 +150,10 @@ function CheckOut() {
         <div>
             <h4>Bill Details</h4>
            <h5>Item Total {totalCartPrice()}</h5>
+
            <h5>Delivery Fee {deliveryFee}</h5>
-           <br/>
-           <h4>Grand Total {totalCartPrice() + deliveryFee}</h4>
+           <h5>Discount  {discount}</h5>
+           <h4>Grand Total {totalCartPrice() + deliveryFee - discount}</h4>
         </div>
         
       </div>:
