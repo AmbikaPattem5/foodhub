@@ -30,6 +30,7 @@ function AppRoutes() {
         <Route path="orders" element={<Orders/>}/>
         <Route path="orderConfirmation/:orderId" element={<OrderConfirmation/>}/>
         <Route path="orders/:orderId" element={<OrderDetails/>}/>
+        <Route path="/offers" element={<Offers/>}/>
       </Route>
     </Routes>
   );
