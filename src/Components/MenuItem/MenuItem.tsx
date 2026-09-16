@@ -1,7 +1,7 @@
 import useCart from "../../CustomHooks/useCart";
 import type { RestaurantMenu } from "../../types/Restaurant";
 function MenuItem({ item }: RestaurantMenu) {
-  const { handleAddItem} = useCart();
+  const { handleAddItem,addItemsToCart} = useCart();
 
   return (
     <div>
