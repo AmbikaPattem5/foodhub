@@ -76,15 +76,23 @@ export type OrderType = {
     createdAt :string
 }
 
-export enum DiscountType{
+export enum DiscountType {
    PERCENTAGE ="PERCENTAGE", 
     FLAT = "FLAT"
 }
-export type Coupen={
+export type Coupon={
     id: number,
      code: string;
     discountType: DiscountType;
     discountValue : number;
-    minOrderAmount : number;
+    minimumOrderAmount : number;
     isActive :boolean;
+}
+export type CoupenContextType = {
+    appliedCoupen : Coupon |undefined;
+    applyCoupon : (code:string)=> void;
+    removeCoupon : ()=> void;
+    calculateDiscount : () => undefined |number;
+    validateCoupon : () => boolean
+
 }
