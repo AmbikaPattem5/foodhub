@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import type { OrderType } from "../../types/Types";
-
+import { useNavigate } from "react-router-dom";
 function Orders(){
+    const navigate = useNavigate()
     const orders : string|null = localStorage.getItem("orders");
     const orderDetails : OrderType[] = orders=== null ? [] : JSON.parse(orders);
-    
+    function handleOrderDetails(orderId : string) {
+        navigate(`/orders/${orderId}`)
+    }
     return(
         <div>
             {orderDetails.length === 0 ?            
@@ -22,11 +25,15 @@ function Orders(){
                    <h4>{order.status}</h4>
                    <div>{order.items.map((item)=>
                         <div key={item.id}>
+                            <div>
                             <p>{item.name}</p>
                             <p>{item.price *item.quantity }</p>
                             <p>{item.quantity}</p>
                         </div>
+                    </div>
+                    
                 )}</div>
+                <button onClick={()=>handleOrderDetails(order.id)}>View Details </button>
                 </div>
                 
             ))
