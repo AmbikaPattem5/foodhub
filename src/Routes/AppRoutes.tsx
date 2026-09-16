@@ -12,6 +12,7 @@ import Cart from "../Pages/Cart/Cart";
 import CheckOut from "../Pages/CheckOut/CheckOut";
 import Orders from "../Pages/Orders/Orders";
 import OrderConfirmation from "../Pages/OrderConfirmation/OrderConfirmation";
+import OrderDetails from "../Pages/OrderDetails/OrderDetails";
 function AppRoutes() {
   return (
     <Routes>
@@ -28,6 +29,7 @@ function AppRoutes() {
         <Route path="checkout" element={<CheckOut />} />
         <Route path="orders" element={<Orders/>}/>
         <Route path="orderConfirmation/:orderId" element={<OrderConfirmation/>}/>
+        <Route path="orders/:orderId" element={<OrderDetails/>}/>
       </Route>
     </Routes>
   );
