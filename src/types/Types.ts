@@ -75,3 +75,16 @@ export type OrderType = {
     status: OrderStatus  ;
     createdAt :string
 }
+
+export enum DiscountType{
+   PERCENTAGE ="PERCENTAGE", 
+    FLAT = "FLAT"
+}
+export type Coupen={
+    id: number,
+     code: string;
+    discountType: DiscountType;
+    discountValue : number;
+    minOrderAmount : number;
+    isActive :boolean;
+}
