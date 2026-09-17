@@ -9,7 +9,7 @@ function Home() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [selectedCuisine, setSelectedCuisine] = useState<string>("");
   // console.log(Restaurants)
-      const {handleFavorite, favoriteRestaurant} = useFavorite();
+      const {addFavorites,favorites} = useFavorite();
 
   const navigate = useNavigate();
   function handleSearch(e) {
@@ -103,7 +103,7 @@ function Home() {
                 <p>
                   <small>{restaurant.deliveryTime} minutes</small>
                 </p>
-                <button onClick={()=>handleFavorite(restaurant.id)}>{favoriteRestaurant ? '❤️' :'♡'}</button>
+                <button onClick={(e)=> {e.stopPropagation(); addFavorites(restaurant.id)}}>{favorites.includes(restaurant.id)? '❤️' :'♡'}</button>
                 
               </div>
             ))}

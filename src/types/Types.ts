@@ -98,9 +98,6 @@ export type CoupenContextType = {
 }
 export type FavoriteContextType = {
 
-    favorites : number;
-    favoriteRestaurant :boolean;
-    handleFavorite : (id:number) => number
-    addFavorite : (id: number)=> void;
-    removeFavorite : (id: number) => void;
+    favorites : number[];
+    addFavorites : (id: number)=> void;
 }

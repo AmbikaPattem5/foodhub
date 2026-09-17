@@ -1,25 +1,22 @@
 import { useState } from "react";
 import { FavoriteContext } from "./FavoriteContext";
 import type { ChildrenProp } from "../../types/Types";
-import { Restaurants } from "../../services/restaurantData";
-import type { Restaurant } from "../../types/Restaurant";
 function FavoriteProvider({children}:ChildrenProp) {
-    const [favorites,setFavorites] = useState<Restaurant[]>([])
-    const [favoriteRestaurant,setFavoriteRestaurant] = useState<boolean>(false)
-    function handleFavorite(id : number){
-        Restaurants.map((restaurant)=>{
-            if(restaurant.id === id){
-                        setFavoriteRestaurant(!favoriteRestaurant)
-            }
-    })
-
-    }
-    function addFavorites() {
-
+    const [favorites,setFavorites] = useState<number[]>([])
+    function addFavorites(id : number) {
+            let updateList : number[];
+       const favoriteList = favorites.includes(id);
+       if(favoriteList){
+         updateList = favorites.filter((favId) => favId !== id)
+       }
+       else{
+         updateList = [...favorites, id];
+       }
+       setFavorites(updateList)
     }
     return(
     <div>
-        <FavoriteContext.Provider value={{handleFavorite,favoriteRestaurant}}>
+        <FavoriteContext.Provider value={{addFavorites,favorites}}>
             {children}
         </FavoriteContext.Provider>
     </div>)
