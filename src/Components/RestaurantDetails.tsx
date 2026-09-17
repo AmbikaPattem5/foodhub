@@ -3,9 +3,11 @@ import { useParams } from "react-router-dom";
 import { Restaurants } from "../services/restaurantData";
 import type { Restaurant } from "../types/Restaurant";
 import { RestaurantMenuItems } from "../services/restaurantMenu";
+import useFavorite from "../CustomHooks/useFavorite";
 import MenuItem from "./MenuItem/MenuItem";
 function RestaurantDetails(){
     const {id}=useParams()
+    const {handleFavorite, favoriteRestaurant} = useFavorite();
     const updatedRestaurant:Restaurant|undefined=Restaurants.find((restaurant)=>(restaurant.id===Number(id)))
         
     const newMenuData=RestaurantMenuItems.filter((restaurant)=>(restaurant.restaurantId===updatedRestaurant?.id));
@@ -23,13 +25,18 @@ return(
             <div>
                 <img src={updatedRestaurant.restaurantImage} alt='image' height={200} width={200}/>
             </div>
+            
+            <div>
             <section>
-            <p>{updatedRestaurant.restaurantName}</p>
-            <p>⭐{updatedRestaurant.rating}</p>
-            <p>{updatedRestaurant.cuisine}</p>
-            <p>{updatedRestaurant.deliveryTime} minutes</p>
-            <p>₹{updatedRestaurant.priceForTwo} for Two</p>
+                <div>
+                    <p>{updatedRestaurant.restaurantName}</p>
+                    <p>⭐{updatedRestaurant.rating}</p>
+                    <p>{updatedRestaurant.cuisine}</p>
+                    <p>{updatedRestaurant.deliveryTime} minutes</p>
+                    <p>₹{updatedRestaurant.priceForTwo} for Two</p>
+            </div>
             </section>
+            </div>
             <div>
                 <h4>About</h4>
                 <h6>  Enjoy delicious biryani and North Indian cuisine. </h6>
