@@ -14,6 +14,8 @@ import Orders from "../Pages/Orders/Orders";
 import OrderConfirmation from "../Pages/OrderConfirmation/OrderConfirmation";
 import OrderDetails from "../Pages/OrderDetails/OrderDetails";
 import Favorites from "../Pages/Favourites/Favorites";
+import ProtectedRoutes from "./ProtectedRoutes";
+import NotFound from "../Pages/Unauthorized/NotFond";
 function AppRoutes() {
   return (
     <Routes>
@@ -22,16 +24,20 @@ function AppRoutes() {
         <Route path="restaurants" element={<Restaurants />} />
         <Route path="about" element={<About />} />
         <Route path="offers" element={<Offers />} />
-        <Route path="cart" element={<Cart />} />
+        <Route element={<ProtectedRoutes/>}>
+          <Route path="cart" element={<Cart />} />
+          <Route path="checkout" element={<CheckOut />} />
+          <Route path="favorites" element={<Favorites/>}/>
+          <Route path="orders" element={<Orders/>}/>
+          <Route path="orders/:orderId" element={<OrderDetails/>}/>
+          <Route path="restaurantdetails/:id" element={<RestaurantDetails />} />
+          <Route path="orderConfirmation/:orderId" element={<OrderConfirmation/>}/>
+
+        </Route>
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
         <Route path="forgotPassword" element={<ForgotPassword />} />
-        <Route path="restaurantdetails/:id" element={<RestaurantDetails />} />
-        <Route path="checkout" element={<CheckOut />} />
-        <Route path="orders" element={<Orders/>}/>
-        <Route path="orderConfirmation/:orderId" element={<OrderConfirmation/>}/>
-        <Route path="orders/:orderId" element={<OrderDetails/>}/>
-        <Route path="favorites" element={<Favorites/>}/>
+        <Route path="*" element={<NotFound/>}/>
       </Route>
     </Routes>
   );
