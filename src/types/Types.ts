@@ -96,3 +96,8 @@ export type CoupenContextType = {
     validateCoupon : () => boolean
 
 }
+export type FavoriteContextType = {
+
+    favorites : number[];
+    addFavorites : (id: number)=> void;
+}
