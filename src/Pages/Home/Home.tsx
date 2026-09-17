@@ -2,12 +2,15 @@ import { useState } from "react";
 import type { Restaurant } from "../../types/Restaurant";
 import { Restaurants } from "../../services/restaurantData";
 import RestaurantCard from "../../Components/RestaurantDetails";
+import useFavorite from "../../CustomHooks/useFavorite";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
 function Home() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [selectedCuisine, setSelectedCuisine] = useState<string>("");
   // console.log(Restaurants)
+      const {handleFavorite, favoriteRestaurant} = useFavorite();
+
   const navigate = useNavigate();
   function handleSearch(e) {
     return setSearchInput(e.target.value);
@@ -100,6 +103,8 @@ function Home() {
                 <p>
                   <small>{restaurant.deliveryTime} minutes</small>
                 </p>
+                <button onClick={()=>handleFavorite(restaurant.id)}>{favoriteRestaurant ? '❤️' :'♡'}</button>
+                
               </div>
             ))}
           </div>
