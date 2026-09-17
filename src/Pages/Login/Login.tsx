@@ -2,12 +2,15 @@ import { useState } from "react";
 import { useAuth } from "../../CustomHooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import type { LoginUser,User } from "../../types/Types";
+import { useLocation } from "react-router-dom";
 function Login(){
     const {login}=useAuth();
     const [error,setError]=useState<string>('');
     const data=localStorage.getItem("users");
     const response:User[]=data?JSON.parse(data):[];
     const navigate=useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/"
     const [formData,setFormData]=useState<LoginUser>({
         name:"",password:"",remember:false,
     })
@@ -30,7 +33,7 @@ function Login(){
         // }
         if(loggInUser){
             login(loggInUser.name);
-            navigate('/')
+            navigate(from)
         }
         else {
             setError("Invalid Credentials")
