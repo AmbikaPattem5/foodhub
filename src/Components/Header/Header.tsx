@@ -1,47 +1,59 @@
-import { Link, useNavigate } from 'react-router-dom';
-import './Header.css'
-import { useAuth } from '../../CustomHooks/useAuth';
-import useCart from '../../CustomHooks/useCart';
-import logo from '../../assets/FoodHub_logo.png'
-function Header(){
-            const navigate=useNavigate();
-            const {user,logout}=useAuth();
-            const {totalCartItems} = useCart();
-    function handleLogin(){
-        navigate('/login')
-    }    
-    function handleRegister(){
-        navigate('/register')
-    }
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../CustomHooks/useAuth";
+import useCart from "../../CustomHooks/useCart";
+import logo from "../../assets/FoodHub_logo.png";
+function Header() {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const { totalCartItems } = useCart();
+  function handleLogin() {
+    navigate("/login");
+  }
+  function handleRegister() {
+    navigate("/register");
+  }
 
-
-return(
-    <div className="container">
-        <div className='img'>
-            <img src={logo} alt='FoodHub' height={50} width={70}/>
+  return (
+    <div className="flex items-center justify-between border-b bg-white px-8 py-4">
+      <div>
+        <img src={logo} alt="FoodHub" className="h-10 w-auto" />
+      </div>
+      <div className="flex gap-6 text-gray-700">
+        <Link to="/" className="hover:text-red-500">
+          Home
+        </Link>
+        <Link to="/restaurants" className="hover:text-red-500">
+          Restaurants
+        </Link>
+        <Link to="/offers" className="hover:text-red-500">
+          Offers
+        </Link>
+        <Link to="/about" className="hover:text-red-500">
+          About
+        </Link>
+      </div>
+      <div className="flex gap-8 items-center">
+        <div className="p-2 rounded-full text-lg hover:bg-gray-100 cursor-pointer">🔍</div>
+        <div className="flex gap-8 text-gray-700">
+          <Link to="/cart" className="hover:text-red-500">Cart({totalCartItems()})</Link>
+          <Link to="/orders" className="hover:text-red-500">My Orders</Link>
         </div>
-        <div className='links'>
-            <Link to='/'>Home</Link>
-            <Link to='/restaurants'>Restaurants</Link>
-            <Link to='/offers'>Offers</Link>
-            <Link to='/about'>About</Link>
+        <div className="flex items-center text-gray-700">
+          <Link to="/favorites" className="hover:text-red-500">Favorites</Link>
         </div>
-        <div>
-            <div>🔍</div>
+        <div className="flex items-center gap-3">
+          {!user ? (
+            <button className="px-4 py-2 rounded-lg font-medium bg-red-500 text-white hover:bg-red-600" onClick={handleLogin}>Login</button>
+          ) : (
+            <p>
+              {user}
+              <button className="px-4 py-2 rounded-lg font-medium bg-red-500 text-white hover:bg-red-600" onClick={logout}>Logout</button>
+            </p>
+          )}
+          {user ? "" : <button className="px-4 py-2 rounded-lg font-medium border border-red-500 text-red-500 hover:bg-red-50" onClick={handleRegister}>Register</button>}
         </div>
-        <div>
-            <Link to='/cart'>Cart({totalCartItems()})</Link>
-            <Link to="/orders">My Orders</Link>
-        </div>
-        <div>
-            <Link to='/favorites'>Favorites</Link>
-        </div>
-        <div className='buttons'>
-          {!user? <button onClick={handleLogin}>Login</button>:<p>{user}<button onClick={logout}>Logout</button></p>}
-          { user?"":<button onClick={handleRegister}>Register</button>}
-        </div>
-
+      </div>
     </div>
-)
+  );
 }
 export default Header;
