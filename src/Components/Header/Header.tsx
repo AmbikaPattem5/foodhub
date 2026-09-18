@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Header.css'
 import { useAuth } from '../../CustomHooks/useAuth';
 import useCart from '../../CustomHooks/useCart';
+import logo from '../../assets/FoodHub_logo.png'
 function Header(){
             const navigate=useNavigate();
             const {user,logout}=useAuth();
@@ -17,7 +18,7 @@ function Header(){
 return(
     <div className="container">
         <div className='img'>
-            <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsvALr_p3z5_yT7TzdJa38utVnwssmTjWdeGi8kFDfEQ&s=10' alt='FoodHub' height={50} width={70}/>
+            <img src={logo} alt='FoodHub' height={50} width={70}/>
         </div>
         <div className='links'>
             <Link to='/'>Home</Link>
