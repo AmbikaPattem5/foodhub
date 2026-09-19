@@ -1,4 +1,4 @@
-.restaurentList{
+/* .restaurentList{
     display: flex;
     gap:15px;
 }
@@ -6,4 +6,16 @@
     border: 1px solid gray;
     height:200px;
     width:150px;
-}
+} */
+ .rating{
+        position: relative;
+    bottom: 12px;
+
+ }
+
+ .time{
+        position: relative;
+    float: right;
+    bottom: 10px;
+
+ }
