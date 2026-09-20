@@ -40,6 +40,7 @@ export type CartContextType = {
     totalCartItems : () => number ;
     totalCartPrice : () => number;
     clearCart: () => void;
+    isItemExist :(item : RestaurantMenu) => CartItemType |undefined;
 }
 export type ChildrenProp = {
   children: React.ReactNode;
