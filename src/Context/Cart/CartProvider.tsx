@@ -4,9 +4,17 @@ import type { CartItemType, ChildrenProp } from "../../types/Types";
 import type { RestaurantMenu } from "../../types/Restaurant";
 function CartProvider({ children }: ChildrenProp) {
   const [cartItem, setCartItem] = useState<CartItemType[]>([]);
+
   function handleAddItem(item: RestaurantMenu) {
+    const newCartItem: CartItemType = {
+        id: item.id,
+        restaurantId: item.restaurantId,
+        name: item.name,
+        price: item.price,
+        quantity: 1,
+      }
     if (cartItem.length === 0) {
-      addItemsToCart(item);
+      addItemsToCart(newCartItem);
       return
     }
     const result = cartItem.some(
@@ -14,20 +22,16 @@ function CartProvider({ children }: ChildrenProp) {
     );
     if (result) {
       const cartResult = confirm(
-        " Already you have cart items from other restaurants",
+        " Already you have cart items from other restaurants.Do you want to clear the cart and new Item?",
       );
       if (cartResult) {
-        const newCartItem: CartItemType = {
-        id: item.id,
-        restaurantId: item.restaurantId,
-        name: item.name,
-        price: item.price,
-        quantity: 1,
-      }
+        
       setCartItem([newCartItem])
-    } else {
-      addItemsToCart(item);
-    }
+    } 
+    
+  }
+  else{
+    addItemsToCart(newCartItem)
   }
 }
   function removeItem(itemId: number) {
@@ -80,7 +84,8 @@ function CartProvider({ children }: ChildrenProp) {
   function clearCart() {
     setCartItem([]);
   }
-  function addItemsToCart(item :RestaurantMenu) {
+
+  function addItemsToCart(item :CartItemType) {
     const itemExists = cartItem.some((cart) => cart.id === item.id);
 
     if (itemExists) {
@@ -108,7 +113,9 @@ function CartProvider({ children }: ChildrenProp) {
       setCartItem([...cartItem, newCartItem]);
     }
   }
-
+ function isItemExist(item : RestaurantMenu):CartItemType | undefined{
+  return cartItem.find((oldItem)=>(oldItem.restaurantId === item.restaurantId && oldItem.id === item.id))
+ }
   return (
     <CartContext.Provider
       value={{
@@ -119,6 +126,7 @@ function CartProvider({ children }: ChildrenProp) {
         decrementCartItem,
         totalCartItems,
         totalCartPrice,
+        isItemExist,
         clearCart,
       }}
     >
