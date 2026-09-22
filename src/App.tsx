@@ -9,17 +9,17 @@ function App() {
 
   return (
     <div>
-      
-      <BrowserRouter>
-      <ContextProvider>
-        <FavoriteProvider>
-        <CartProvider>
-          <CoupenProvider>
-                  <AppRoutes/>
-          </CoupenProvider>
-      </CartProvider>
-      </FavoriteProvider>
-      </ContextProvider>
+
+      <BrowserRouter basename="/foodhub">
+        <ContextProvider>
+          <FavoriteProvider>
+            <CartProvider>
+              <CoupenProvider>
+                <AppRoutes />
+              </CoupenProvider>
+            </CartProvider>
+          </FavoriteProvider>
+        </ContextProvider>
       </BrowserRouter>
     </div>
   )
