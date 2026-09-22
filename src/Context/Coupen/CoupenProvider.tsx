@@ -12,7 +12,7 @@ function CoupenProvider({ children }: ChildrenProp) {
   const [appliedCoupen, setAppliedCoupen] = useState<Coupon>();
 
   function applyCoupon(code: string) {
-    const getCoupon : Coupon = coupons.find((coupon) => coupon.code === code);
+    const getCoupon: Coupon | undefined = coupons.find((coupon) => coupon.code === code);
     if (getCoupon && getCoupon.isActive) {
       setAppliedCoupen(getCoupon);
     }

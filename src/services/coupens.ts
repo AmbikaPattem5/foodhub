@@ -1,5 +1,5 @@
 import { DiscountType, type Coupon } from "../types/Types";
-export const coupons: Coupen[] = [
+export const coupons: Coupon[] = [
   {
     id: 1,
     code: "WELCOME50",
