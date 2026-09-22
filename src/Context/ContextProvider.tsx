@@ -1,6 +1,7 @@
 import { AuthContext } from "./AuthContext";
 import { useState } from "react";
-function ContextProvider({children}){
+import type { ChildrenProp } from "../types/Types";
+function ContextProvider({children} : ChildrenProp){
     
 const [user,setUser]=useState<string|null>(null);
 
