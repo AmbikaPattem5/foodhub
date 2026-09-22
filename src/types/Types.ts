@@ -60,27 +60,29 @@ export type addressErrors = {
     address: string;
     city: string;
 }
-export enum OrderStatus {
-    Placed = "Placed",
-    Preparing = "Preparing",
-    OutForDelivery = "OutForDelivery",
-    Delivered = "Delivered",
+export const OrderStatus = {
+    Placed: "Placed",
+    Preparing: "Preparing",
+    OutForDelivery: "OutForDelivery",
+    Delivered: "Delivered",
+} as const;
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 
-}
 export type OrderType = {
     id: string;
     user: string;
     items: Array<CartItemType>;
     address: string;
-    totalAmount: number  ;
-    status: OrderStatus  ;
-    createdAt :string
+    totalAmount: number;
+    status: OrderStatus;
+    createdAt: string;
 }
 
-export enum DiscountType {
-   PERCENTAGE ="PERCENTAGE", 
-    FLAT = "FLAT"
-}
+export const DiscountType = {
+    PERCENTAGE: "PERCENTAGE", 
+    FLAT: "FLAT"
+} as const;
+export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType];
 export type Coupon={
     id: number,
      code: string;
