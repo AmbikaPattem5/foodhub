@@ -2,14 +2,30 @@ import { Link, useNavigate } from "react-router-dom";
 import type { OrderType } from "../../types/Types";
 import { OrderStatus } from "../../types/Types";
 import { Package, Calendar, ArrowRight, Clock, ChefHat, Bike, CheckCircle2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import api from "../../services/api"
 
 function Orders() {
   const navigate = useNavigate();
-  const orders: string | null = localStorage.getItem("orders");
-  const orderDetails: OrderType[] = orders === null ? [] : JSON.parse(orders);
+  const [orders, setOrders] = useState<OrderType[]>([])
+  useEffect(() => {
+    async function getOrders() {
+      try {
+        const response = await api.get("/orders");
+        if (response && response.data && response.data.orders && response.data.orders.length > 0) {
+          setOrders(response.data.orders);
+          console.log(response.data.orders);
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    getOrders();
+  }, [])
 
   // Sort descending by order timestamp if available
-  const sortedOrders = [...orderDetails].reverse();
+  const sortedOrders = [...orders].reverse();
 
   function handleOrderDetails(orderId: string) {
     navigate(`/orders/${orderId}`);
@@ -83,9 +99,9 @@ function Orders() {
           {sortedOrders.map((order) => {
             const dateStr = !isNaN(Number(order.createdAt))
               ? new Date(Number(order.createdAt)).toLocaleString("en-IN", {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                })
+                dateStyle: "medium",
+                timeStyle: "short",
+              })
               : "Recent Order";
 
             const totalItemCount = order.items.reduce((acc, i) => acc + i.quantity, 0);

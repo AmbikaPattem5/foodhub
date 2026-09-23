@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import type { User, FormErrors } from "../../types/Types";
 import { User as UserIcon, Mail, Phone, Lock, AlertCircle, CheckCircle2, ArrowRight } from "lucide-react";
 import logo from "../../assets/FoodHub_logo.png";
-
+import api from "../../services/api";
+import toast from "react-hot-toast";
 function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<User>({
@@ -66,7 +67,7 @@ function Register() {
     return errors;
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const errors = validateForm();
     setFormErrors(errors);
@@ -75,7 +76,16 @@ function Register() {
     if (hasError) {
       return;
     }
-
+    try {
+      const response = await api.post("/auth/register", formData);
+      if (response && response.data && response.data.message) {
+        toast.success(response.data.message || "Registration successful", { duration: 2500 })
+        navigate("/login");
+      }
+    }
+    catch (err) {
+      toast.error("Failed to register! Please try again.", { duration: 2500 });
+    }
     const response: string | null = localStorage.getItem("users");
     const responseData: User[] = response === null ? [] : JSON.parse(response);
 
@@ -146,11 +156,10 @@ function Register() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="e.g. Rahul Sharma"
-                className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${
-                  formErrors.name
-                    ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
-                    : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
-                }`}
+                className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${formErrors.name
+                  ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                  : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
+                  }`}
               />
             </div>
             {formErrors.name && (
@@ -174,11 +183,10 @@ function Register() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="name@example.com"
-                  className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${
-                    formErrors.email
-                      ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
-                      : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
-                  }`}
+                  className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${formErrors.email
+                    ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                    : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
+                    }`}
                 />
               </div>
               {formErrors.email && (
@@ -201,11 +209,10 @@ function Register() {
                   onChange={handleChange}
                   placeholder="10-digit number"
                   maxLength={10}
-                  className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${
-                    formErrors.phone
-                      ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
-                      : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
-                  }`}
+                  className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${formErrors.phone
+                    ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                    : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
+                    }`}
                 />
               </div>
               {formErrors.phone && (
@@ -230,11 +237,10 @@ function Register() {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Create password"
-                  className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${
-                    formErrors.password
-                      ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
-                      : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
-                  }`}
+                  className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${formErrors.password
+                    ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                    : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
+                    }`}
                 />
               </div>
               {formErrors.password && (
@@ -256,11 +262,10 @@ function Register() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="Repeat password"
-                  className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${
-                    formErrors.confirmPassword
-                      ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
-                      : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
-                  }`}
+                  className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${formErrors.confirmPassword
+                    ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                    : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
+                    }`}
                 />
               </div>
               {formErrors.confirmPassword && (

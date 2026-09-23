@@ -1,50 +1,50 @@
-import React, { useState } from "react";
-import { Restaurants as restaurantList } from "../../services/restaurantData";
+import React, { useEffect, useState } from "react";
 import useFavorite from "../../CustomHooks/useFavorite";
 import { useNavigate } from "react-router-dom";
 import { Search, Star, Clock, Heart, ArrowRight, SlidersHorizontal } from "lucide-react";
+import type { Restaurant } from "../../types/Restaurant";
+import api from "../../services/api";
+import useRestaurants from "../../CustomHooks/useRestaurants";
 
 type SortOption = "default" | "rating" | "deliveryTime" | "priceLow" | "priceHigh";
 
 function Restaurants() {
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
   const [selectedCuisine, setSelectedCuisine] = useState<string>("");
   const [sortBy, setSortBy] = useState<SortOption>("default");
   const { addFavorites, favorites } = useFavorite();
   const navigate = useNavigate();
-
-  // Extract unique cuisines
-  const uniqueCuisines: string[] = [];
-  restaurantList.forEach((r) => {
-    r.cuisine.forEach((c) => {
-      const lower = c.toLowerCase();
-      if (!uniqueCuisines.includes(lower)) {
-        uniqueCuisines.push(lower);
+  const { cuisines } = useRestaurants();
+  useEffect(() => {
+    async function getRestaurants() {
+      try {
+        const response = await api.get("/restaurants",
+          {
+            params: {
+              search: searchInput,
+              cuisine: selectedCuisine,
+              sortBy: sortBy
+            }
+          }
+        );
+        if (response && response.data && response.data.restaurants && response.data.restaurants.length > 0) {
+          setRestaurants(response.data.restaurants)
+        }
+        console.log(restaurants)
       }
-    });
-  });
+      catch (err) {
+        console.log(err);
+      }
+    }
+    getRestaurants();
+  }, [searchInput, selectedCuisine, sortBy])
+  // Extract unique cuisines
+
 
   // Filter
-  const filtered = restaurantList.filter((restaurant) => {
-    const matchesSearch =
-      restaurant.restaurantName.toLowerCase().includes(searchInput.toLowerCase()) ||
-      restaurant.cuisine.some((c) => c.toLowerCase().includes(searchInput.toLowerCase()));
 
-    const matchesCuisine =
-      selectedCuisine === "" ||
-      restaurant.cuisine.some((c) => c.toLowerCase() === selectedCuisine.toLowerCase());
 
-    return matchesSearch && matchesCuisine;
-  });
-
-  // Sort
-  const sorted = [...filtered].sort((a, b) => {
-    if (sortBy === "rating") return b.rating - a.rating;
-    if (sortBy === "deliveryTime") return a.deliveryTime - b.deliveryTime;
-    if (sortBy === "priceLow") return Number(a.priceForTwo) - Number(b.priceForTwo);
-    if (sortBy === "priceHigh") return Number(b.priceForTwo) - Number(a.priceForTwo);
-    return 0;
-  });
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -53,7 +53,7 @@ function Restaurants() {
         <div>
           <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">All Restaurants</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Explore {restaurantList.length} top-rated eateries delivering right to you
+            Explore {restaurants.length} top-rated eateries delivering right to you
           </p>
         </div>
 
@@ -91,25 +91,23 @@ function Restaurants() {
       <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
         <button
           onClick={() => setSelectedCuisine("")}
-          className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold capitalize transition ${
-            selectedCuisine === ""
-              ? "bg-red-600 text-white shadow-xs"
-              : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
-          }`}
+          className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold capitalize transition ${selectedCuisine === ""
+            ? "bg-red-600 text-white shadow-xs"
+            : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+            }`}
         >
           All Cuisines
         </button>
-        {uniqueCuisines.map((cuisine) => {
+        {cuisines.map((cuisine) => {
           const isSelected = selectedCuisine.toLowerCase() === cuisine.toLowerCase();
           return (
             <button
               key={cuisine}
               onClick={() => setSelectedCuisine(isSelected ? "" : cuisine)}
-              className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold capitalize transition ${
-                isSelected
-                  ? "bg-red-600 text-white shadow-xs"
-                  : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
-              }`}
+              className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold capitalize transition ${isSelected
+                ? "bg-red-600 text-white shadow-xs"
+                : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+                }`}
             >
               {cuisine}
             </button>
@@ -118,9 +116,9 @@ function Restaurants() {
       </div>
 
       {/* Restaurant Grid */}
-      {sorted.length > 0 ? (
+      {restaurants.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {sorted.map((restaurant) => {
+          {restaurants.map((restaurant) => {
             const isFav = favorites.includes(restaurant.id);
             return (
               <div
@@ -144,9 +142,8 @@ function Restaurants() {
                     className="absolute top-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-xs text-gray-700 hover:text-red-600 hover:bg-white shadow-md transition active:scale-90"
                   >
                     <Heart
-                      className={`w-4 h-4 transition-colors ${
-                        isFav ? "fill-red-500 text-red-500" : "text-gray-700"
-                      }`}
+                      className={`w-4 h-4 transition-colors ${isFav ? "fill-red-500 text-red-500" : "text-gray-700"
+                        }`}
                     />
                   </button>
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs font-semibold text-white">
