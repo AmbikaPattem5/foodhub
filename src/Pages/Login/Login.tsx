@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 function Login() {
   const { login } = useAuth();
   const [error, setError] = useState<string>("");
-  const [user, setUser] = useState<string>("");
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
