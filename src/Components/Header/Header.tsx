@@ -19,7 +19,7 @@ import {
 
 function Header() {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout, login } = useAuth();
   const { totalCartItems } = useCart();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -49,8 +49,9 @@ function Header() {
   function handleLogout() {
     setDropdownOpen(false);
     setMobileMenuOpen(false);
+    login('')
     logout();
-    navigate("/");
+    navigate("/login");
   }
 
   const cartCount = totalCartItems();

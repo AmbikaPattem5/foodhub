@@ -15,8 +15,8 @@ function Login() {
   const from = location.state?.from?.pathname || "/";
 
   const [formData, setFormData] = useState<LoginUser>({
-    name: "",
-    password: "",
+    name: "admin",
+    password: "admin",
     remember: false,
   });
 
