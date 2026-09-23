@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useAuth } from "../../CustomHooks/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import type { LoginUser, User } from "../../types/Types";
+import type { LoginUser } from "../../types/Types";
 import { Lock, Mail, AlertCircle, ArrowRight } from "lucide-react";
 import logo from "../../assets/FoodHub_logo.png";
-
+import api from "../../services/api";
+import toast from "react-hot-toast";
 function Login() {
   const { login } = useAuth();
   const [error, setError] = useState<string>("");
-  const data = localStorage.getItem("users");
-  const response: User[] = data ? JSON.parse(data) : [];
+  const [user, setUser] = useState<string>("");
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -20,20 +20,19 @@ function Login() {
     remember: false,
   });
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const loggInUser = response.find(
-      (user) =>
-        (user.name === formData.name || user.email === formData.name) &&
-        user.password === formData.password
-    );
-
-    if (loggInUser) {
-      login(loggInUser.name);
+    try {
+      const response = await api.post("/auth/login", { name: formData.name, password: formData.password });
+      console.log(response);
+      toast.success(response.data.message || "Login Successfull", { duration: 2500 })
+      login(formData.name)
       navigate(from);
-    } else {
-      setError("Invalid username/email or password. Please try again.");
     }
+    catch (err) {
+      toast.error("Invalid credentials or server error!", { duration: 2500 });
+    }
+
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

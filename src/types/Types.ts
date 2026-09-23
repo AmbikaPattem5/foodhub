@@ -1,61 +1,61 @@
 import type { RestaurantMenu } from "./Restaurant";
 
-export type User={
-    name:string,
-    email:string,
-    password:string,
-    confirmPassword:string,
-    phone:string,
-    terms:boolean;
+export type User = {
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+    phone: string,
+    terms: boolean;
 }
-export type LoginUser=Pick<User,'name'|'password'>&{
-    remember:boolean,
+export type LoginUser = Pick<User, 'name' | 'password'> & {
+    remember: boolean,
 }
-export type FormErrors={
-    name:string;
-    email:string;
-    password:string;
-    confirmPassword:string;
-    phone:string;
-    terms:string;
+export type FormErrors = {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    phone: string;
+    terms: string;
 }
-export type AuthContextType={
-    user:string|null,
-    login:(username:string)=>void
-    logout:()=>void,
+export type AuthContextType = {
+    user: string | null,
+    login: (username: string) => void
+    logout: () => void,
 }
-export type CartItemType={
-    id:number;
-    name:string;
-    price:number;
-    quantity:number;
-    restaurantId:number;
+export type CartItemType = {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+    restaurantId: number;
 }
 export type CartContextType = {
-    cartItem : CartItemType[];
-    handleAddItem : (item : RestaurantMenu) => void;
-    removeItem : (itemId : number) => void;
-    incrementCartItem : (itemId : number) => void;
-    decrementCartItem : (itemId : number) => void;
-    totalCartItems : () => number ;
-    totalCartPrice : () => number;
+    cartItem: CartItemType[];
+    handleAddItem: (item: RestaurantMenu) => void;
+    removeItem: (itemId: number) => void;
+    incrementCartItem: (itemId: number) => void;
+    decrementCartItem: (itemId: number) => void;
+    totalCartItems: () => number;
+    totalCartPrice: () => number;
     clearCart: () => void;
-    isItemExist :(item : RestaurantMenu) => CartItemType |undefined;
+    isItemExist: (item: RestaurantMenu) => CartItemType | undefined;
 }
 export type ChildrenProp = {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }
 
 export type DeliveryDetails = {
-    name : string;
-    phone : string;
-    address : string;
-    city : string;
-    pincode : string;
+    name: string;
+    phone: string;
+    address: string;
+    city: string;
+    pincode: string;
 }
 export type addressErrors = {
     name: string;
-    phone : string;
+    phone: string;
     pincode: string;
     address: string;
     city: string;
@@ -79,28 +79,35 @@ export type OrderType = {
 }
 
 export const DiscountType = {
-    PERCENTAGE: "PERCENTAGE", 
+    PERCENTAGE: "PERCENTAGE",
     FLAT: "FLAT"
 } as const;
 export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType];
-export type Coupon={
+export type Coupon = {
     id: number,
-     code: string;
+    code: string;
     discountType: DiscountType;
-    discountValue : number;
-    minimumOrderAmount : number;
-    isActive :boolean;
+    discountValue: number;
+    minimumOrderAmount: number;
+    isActive: boolean;
 }
 export type CoupenContextType = {
-    appliedCoupen : Coupon |undefined;
-    applyCoupon : (code:string)=> void;
-    removeCoupon : ()=> void;
-    calculateDiscount : () => undefined |number;
-    validateCoupon : () => boolean
+    appliedCoupen: Coupon | undefined;
+    applyCoupon: (code: string) => void;
+    removeCoupon: () => void;
+    calculateDiscount: () => undefined | number;
+    validateCoupon: () => boolean
 
 }
 export type FavoriteContextType = {
 
-    favorites : number[];
-    addFavorites : (id: number)=> void;
+    favorites: number[];
+    addFavorites: (id: number) => void;
 }
+
+export type RestaurantContextType = {
+    cuisines: string[];
+    loading: boolean;
+    error: string | null;
+    refreshRestaurants: () => Promise<void>;
+};

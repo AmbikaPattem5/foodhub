@@ -1,10 +1,26 @@
+import { useState, useEffect } from "react";
 import Coupen from "../../Components/Coupen/Coupen";
-import { coupons } from "../../services/coupens";
 import type { Coupon } from "../../types/Types";
 import { Sparkles, Percent } from "lucide-react";
-
+import api from "../../services/api";
 function Offers() {
-  const updatedCoupons: Coupon[] = coupons.filter((coupon) => coupon.isActive === true);
+  const [coupons, setCoupons] = useState<Coupon[]>([])
+
+  useEffect(() => {
+    async function getCoupons() {
+      try {
+        const response = await api.get("/coupons");
+        if (response && response.data && response.data.coupons) {
+          setCoupons(response.data.coupons);
+          console.log(response.data.coupons)
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    getCoupons();
+  }, [])
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
@@ -32,12 +48,12 @@ function Offers() {
             <h2 className="text-xl font-bold text-gray-900">Available Coupons</h2>
           </div>
           <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-            {updatedCoupons.length} Active {updatedCoupons.length === 1 ? "Offer" : "Offers"}
+            {coupons.length} Active {coupons.length === 1 ? "Offer" : "Offers"}
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {updatedCoupons.map((coupon: Coupon) => (
+          {coupons.map((coupon: Coupon) => (
             <Coupen key={coupon.id} coupon={coupon} />
           ))}
         </div>

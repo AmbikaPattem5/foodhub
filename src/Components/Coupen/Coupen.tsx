@@ -3,7 +3,6 @@ import type { Coupon } from "../../types/Types";
 import { DiscountType } from "../../types/Types";
 import useCoupen from "../../CustomHooks/useCoupen";
 import { Tag, Check, Copy, Sparkles } from "lucide-react";
-
 interface CoupenProps {
   coupon: Coupon;
 }
@@ -11,7 +10,6 @@ interface CoupenProps {
 function Coupen({ coupon }: CoupenProps) {
   const { applyCoupon, appliedCoupen } = useCoupen();
   const [copied, setCopied] = useState(false);
-
   const isApplied = appliedCoupen?.code === coupon.code;
 
   function handleCopy() {
@@ -23,6 +21,7 @@ function Coupen({ coupon }: CoupenProps) {
   function handleApply() {
     applyCoupon(coupon.code);
   }
+
 
   const discountDisplay =
     coupon.discountType === DiscountType.FLAT
