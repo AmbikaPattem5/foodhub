@@ -1,47 +1,44 @@
-import React, { useState } from "react";
-import { Restaurants } from "../../services/restaurantData";
+import React, { useEffect, useState } from "react";
+import useRestaurants from "../../CustomHooks/useRestaurants";
 import useFavorite from "../../CustomHooks/useFavorite";
 import { useNavigate } from "react-router-dom";
 import { Search, Star, Clock, Heart, X, Sparkles, Utensils, ArrowRight } from "lucide-react";
 import "./Home.css";
-
+import type { Restaurant } from "../../types/Restaurant";
+import api from "../../services/api";
 function Home() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [selectedCuisine, setSelectedCuisine] = useState<string>("");
+  const { cuisines } = useRestaurants();
   const { addFavorites, favorites } = useFavorite();
   const navigate = useNavigate();
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  useEffect(() => {
+    async function getRestaurants() {
+      try {
+        const response = await api.get("/restaurants", {
+          params: {
+            search: searchInput,
+            cuisine: selectedCuisine
+          }
+        })
+        if (response && response.data && response.data.restaurants && response.data.restaurants.length > 0) {
+          setRestaurants(response.data.restaurants)
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    getRestaurants();
 
+  }, [searchInput, selectedCuisine])
   function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
     setSearchInput(e.target.value);
   }
 
-  const cuisinList = Restaurants.map((restaurant) => restaurant.cuisine);
-  const uniqueList: string[] = [];
-  for (let i = 0; i < cuisinList.length; i++) {
-    const subList = cuisinList[i];
-    for (let j = 0; j < subList.length; j++) {
-      const cuisinItem = subList[j].toLowerCase();
-      if (!uniqueList.includes(cuisinItem)) {
-        uniqueList.push(cuisinItem);
-      }
-    }
-  }
 
-  const filteredResult = Restaurants.filter((restaurant) => {
-    const searchMatch =
-      restaurant.restaurantName
-        .toLowerCase()
-        .includes(searchInput.toLowerCase()) ||
-      restaurant.cuisine.some((cuisine) =>
-        cuisine.toLowerCase().includes(searchInput.toLowerCase())
-      );
-    const cuisineMatch =
-      selectedCuisine === "" ||
-      restaurant.cuisine.some(
-        (cuisine) => cuisine.toLowerCase() === selectedCuisine.toLowerCase()
-      );
-    return searchMatch && cuisineMatch;
-  });
+
 
   function handleCard(restaurantId: number) {
     navigate(`/restaurantDetails/${restaurantId}`);
@@ -123,25 +120,23 @@ function Home() {
         <div className="flex items-center gap-2 overflow-x-auto py-3 no-scrollbar">
           <button
             onClick={() => setSelectedCuisine("")}
-            className={`shrink-0 px-4 py-2 rounded-full text-xs font-semibold capitalize transition-all ${
-              selectedCuisine === ""
-                ? "bg-red-600 text-white shadow-xs shadow-red-200"
-                : "bg-white text-gray-700 border border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-            }`}
+            className={`shrink-0 px-4 py-2 rounded-full text-xs font-semibold capitalize transition-all ${selectedCuisine === ""
+              ? "bg-red-600 text-white shadow-xs shadow-red-200"
+              : "bg-white text-gray-700 border border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+              }`}
           >
             All Cuisines
           </button>
-          {uniqueList.map((cuisine) => {
+          {cuisines.map((cuisine) => {
             const isSelected = selectedCuisine.toLowerCase() === cuisine.toLowerCase();
             return (
               <button
                 key={cuisine}
                 onClick={() => handleCuisine(cuisine)}
-                className={`shrink-0 px-4 py-2 rounded-full text-xs font-semibold capitalize transition-all ${
-                  isSelected
-                    ? "bg-red-600 text-white shadow-xs shadow-red-200 scale-105"
-                    : "bg-white text-gray-700 border border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                }`}
+                className={`shrink-0 px-4 py-2 rounded-full text-xs font-semibold capitalize transition-all ${isSelected
+                  ? "bg-red-600 text-white shadow-xs shadow-red-200 scale-105"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                  }`}
               >
                 {cuisine}
               </button>
@@ -162,13 +157,13 @@ function Home() {
             </p>
           </div>
           <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-            {filteredResult.length} {filteredResult.length === 1 ? "restaurant" : "restaurants"}
+            {restaurants.length} {restaurants.length === 1 ? "restaurant" : "restaurants"}
           </span>
         </div>
 
-        {filteredResult.length > 0 ? (
+        {restaurants.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredResult.map((restaurant) => {
+            {restaurants.map((restaurant) => {
               const isFav = favorites.includes(restaurant.id);
               return (
                 <div
@@ -197,9 +192,8 @@ function Home() {
                       aria-label={isFav ? "Remove from favorites" : "Add to favorites"}
                     >
                       <Heart
-                        className={`w-4 h-4 transition-colors ${
-                          isFav ? "fill-red-500 text-red-500" : "text-gray-700"
-                        }`}
+                        className={`w-4 h-4 transition-colors ${isFav ? "fill-red-500 text-red-500" : "text-gray-700"
+                          }`}
                       />
                     </button>
 

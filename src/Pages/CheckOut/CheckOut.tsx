@@ -5,14 +5,16 @@ import type { addressErrors, OrderType } from "../../types/Types";
 import { Link, useNavigate } from "react-router-dom";
 import useCoupen from "../../CustomHooks/useCoupen";
 import CouponInput from "../../Components/Coupen/CouponInput";
-import { 
-  MapPin, 
-  Phone, 
-  User, 
-  Building2, 
-  Hash, 
-  ShieldCheck, 
-  ArrowLeft, 
+import api from "../../services/api";
+import toast from "react-hot-toast";
+import {
+  MapPin,
+  Phone,
+  User,
+  Building2,
+  Hash,
+  ShieldCheck,
+  ArrowLeft,
   AlertCircle,
   Lock
 } from "lucide-react";
@@ -47,7 +49,7 @@ function CheckOut() {
     }
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const phonePattern = /^[0-9]{10}$/;
     const pincodePattern = /^[0-9]{6}$/;
@@ -97,21 +99,18 @@ function CheckOut() {
       status: OrderStatus.Placed,
       createdAt: String(Date.now()),
     };
-
-    let updatedOrders: OrderType[];
-    const response: string | null = localStorage.getItem("orders");
-
-    if (response === null) {
-      updatedOrders = [newOrder];
-    } else {
-      const responseData: OrderType[] = JSON.parse(response);
-      updatedOrders = [...responseData, newOrder];
+    try {
+      const response = await api.post("/orders", newOrder)
+      toast.success(response.data.message || "Order placed successfully", { duration: 2500 })
+      navigate(`/orderConfirmation/${newOrder.id}`);
     }
-
-    localStorage.setItem("orders", JSON.stringify(updatedOrders));
-    clearCart();
-    setErrors({ name: "", phone: "", address: "", city: "", pincode: "" });
-    navigate(`/orderConfirmation/${newOrder.id}`);
+    catch (err) {
+      toast.error("Failed to place order! Please try again.", { duration: 2500 });
+    }
+    finally {
+      clearCart();
+      setErrors({ name: "", phone: "", address: "", city: "", pincode: "" });
+    }
   }
 
   const subtotal = totalCartPrice();
@@ -162,11 +161,10 @@ function CheckOut() {
                         value={address.name}
                         onChange={handleChange}
                         placeholder="John Doe"
-                        className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${
-                          errors.name
-                            ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
-                            : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
-                        }`}
+                        className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${errors.name
+                          ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                          : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
+                          }`}
                       />
                       {errors.name && (
                         <p className="text-xs text-red-600 flex items-center gap-1 mt-1">
@@ -187,11 +185,10 @@ function CheckOut() {
                         onChange={handleChange}
                         placeholder="10-digit mobile number"
                         maxLength={10}
-                        className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${
-                          errors.phone
-                            ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
-                            : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
-                        }`}
+                        className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${errors.phone
+                          ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                          : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
+                          }`}
                       />
                       {errors.phone && (
                         <p className="text-xs text-red-600 flex items-center gap-1 mt-1">
@@ -211,11 +208,10 @@ function CheckOut() {
                         value={address.address}
                         onChange={handleChange}
                         placeholder="Flat/House no., building name, street, landmark"
-                        className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition resize-none ${
-                          errors.address
-                            ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
-                            : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
-                        }`}
+                        className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition resize-none ${errors.address
+                          ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                          : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
+                          }`}
                       />
                       {errors.address && (
                         <p className="text-xs text-red-600 flex items-center gap-1 mt-1">
@@ -235,11 +231,10 @@ function CheckOut() {
                         value={address.city}
                         onChange={handleChange}
                         placeholder="e.g. Bangalore"
-                        className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${
-                          errors.city
-                            ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
-                            : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
-                        }`}
+                        className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${errors.city
+                          ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                          : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
+                          }`}
                       />
                       {errors.city && (
                         <p className="text-xs text-red-600 flex items-center gap-1 mt-1">
@@ -260,11 +255,10 @@ function CheckOut() {
                         onChange={handleChange}
                         placeholder="6-digit PIN code"
                         maxLength={6}
-                        className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${
-                          errors.pincode
-                            ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
-                            : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
-                        }`}
+                        className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-gray-50/50 outline-hidden transition ${errors.pincode
+                          ? "border-red-400 focus:ring-2 focus:ring-red-100 bg-red-50/30"
+                          : "border-gray-300 focus:border-red-500 focus:bg-white focus:ring-2 focus:ring-red-100"
+                          }`}
                       />
                       {errors.pincode && (
                         <p className="text-xs text-red-600 flex items-center gap-1 mt-1">

@@ -2,16 +2,28 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, ArrowLeft, CheckCircle2, ArrowRight } from "lucide-react";
 import logo from "../../assets/FoodHub_logo.png";
-
+import api from "../../services/api";
+import toast from "react-hot-toast";
 function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (email.trim()) {
-      setSubmitted(true);
+    try {
+      const response = await api.post("/auth/forgot-password", {
+        email: email.trim()
+      })
+      if (response && response.data && response.data.success) {
+        toast.success(response.data.message || "Password reset link sent successfully", { duration: 2500 })
+
+        setSubmitted(true)
+      }
     }
+    catch (err) {
+      toast.error("Failed to send password reset link! Please try again.", { duration: 2500 });
+    }
+
   }
 
   return (

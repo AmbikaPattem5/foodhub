@@ -1,15 +1,29 @@
-import { Restaurants } from "../../services/restaurantData";
 import useFavorite from "../../CustomHooks/useFavorite";
-import type { Restaurant } from "../../types/Restaurant";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, Star, Clock, ArrowRight, ArrowLeft } from "lucide-react";
-
+import { useEffect, useState } from "react";
+import api from "../../services/api";
+import type { Restaurant } from "../../types/Restaurant";
+import toast from "react-hot-toast";
 function Favorites() {
   const { favorites, addFavorites } = useFavorite();
+  const [favoriteList, setFavoriteList] = useState<Restaurant[]>([])
   const navigate = useNavigate();
-  const favoriteList: Restaurant[] = (Restaurants || []).filter((restaurant) =>
-    favorites.includes(restaurant.id)
-  );
+  useEffect(() => {
+    async function getFavorites() {
+      try {
+        const response = await api.get("/favorites");
+        if (response && response.data && response.data.success) {
+          const data = response.data.restaurants;
+          setFavoriteList(data);
+        }
+      }
+      catch (err) {
+        toast.error("Failed to load favorites! Please try again.", { duration: 2500 });
+      }
+    }
+    getFavorites();
+  }, [favorites])
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
