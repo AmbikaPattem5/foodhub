@@ -12,9 +12,7 @@ function ContextProvider({ children }: ChildrenProp) {
         setUser(userName);
         localStorage.setItem("loggedInUser", userName);
     }
-    function isUserLoggedIn() {
-        return user ? true : false;
-    }
+
     function logout() {
         setUser(null)
     }
