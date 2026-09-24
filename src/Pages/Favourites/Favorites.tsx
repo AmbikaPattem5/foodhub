@@ -4,7 +4,6 @@ import { Heart, Star, Clock, ArrowRight, ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import type { Restaurant } from "../../types/Restaurant";
-import toast from "react-hot-toast";
 function Favorites() {
   const { favorites, addFavorites } = useFavorite();
   const [favoriteList, setFavoriteList] = useState<Restaurant[]>([])
@@ -19,7 +18,7 @@ function Favorites() {
         }
       }
       catch (err) {
-        toast.error("Failed to load favorites! Please try again.", { duration: 2500 });
+        console.log(err)
       }
     }
     getFavorites();
